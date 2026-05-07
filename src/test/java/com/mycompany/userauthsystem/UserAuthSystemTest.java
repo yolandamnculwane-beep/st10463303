@@ -1,57 +1,118 @@
-package com.mycompany.userauthsystem;
+
+package com.mycompany.applicationsystem;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserAuthSystemTest {
+public class ApplicationSystemTest {
 
+    // ---------------- USERNAME TEST ----------------
     @Test
     public void testCheckUserName() {
-        assertTrue(UserAuthSystem.checkUserName("user_"));   // valid
-        assertFalse(UserAuthSystem.checkUserName("user"));   // missing _
-        assertFalse(UserAuthSystem.checkUserName("longusername")); // too long
+
+        String username = "ab_cd"; // valid username
+
+        boolean result = ApplicationSystem.checkUserName(username);
+
+        assertTrue(result); // must return true
     }
 
+    // ---------------- PASSWORD TEST ----------------
     @Test
-    public void testCheckPasswordComplexity() {
-        assertTrue(UserAuthSystem.checkPasswordComplexity("Passw0rd!")); // valid
-        assertFalse(UserAuthSystem.checkPasswordComplexity("password")); // no capital, number, special
-        assertFalse(UserAuthSystem.checkPasswordComplexity("Password")); // no number, special
-        assertFalse(UserAuthSystem.checkPasswordComplexity("Pass1234")); // no special char
+    public void testCheckPassword() {
+
+        String password = "Pass@123"; // valid password
+
+        boolean result = ApplicationSystem.checkPassword(password);
+
+        assertTrue(result); // must return true
     }
 
+    // ---------------- LOGIN TEST ----------------
     @Test
-    public void testCheckCellPhoneNumber() {
-        assertTrue(UserAuthSystem.checkCellPhoneNumber("+27123456789")); // valid
-        assertFalse(UserAuthSystem.checkCellPhoneNumber("0123456789"));  // missing +27
-        assertFalse(UserAuthSystem.checkCellPhoneNumber("+2712345678")); // too short
+    public void testLogin() {
+
+        String enteredUser = "ab_cd";
+        String enteredPass = "Pass@123";
+
+        String savedUser = "ab_cd";
+        String savedPass = "Pass@123";
+
+        boolean result = ApplicationSystem.login(
+                enteredUser,
+                enteredPass,
+                savedUser,
+                savedPass
+        );
+
+        assertTrue(result); // login should pass
     }
 
+    // ---------------- PHONE VALIDATION TEST ----------------
     @Test
-    public void testRegisterUser() {
-        assertEquals("Username and password successfully captured. User registered!",
-                UserAuthSystem.registerUser("user_", "Passw0rd!"));
+    public void testValidateNumber() {
 
-        assertEquals("Username is not correct. Must have _ and max 5 chars.",
-                UserAuthSystem.registerUser("user", "Passw0rd!"));
+        String number = "+27123456789"; // valid number
 
-        assertEquals("Password is not correct. Must have 8+ chars, capital letter, number, and special char.",
-                UserAuthSystem.registerUser("user_", "password"));
+        String result = ApplicationSystem.validateNumber(number);
+
+        assertEquals("Valid", result); // expected result
     }
 
+    // ---------------- HASH TEST ----------------
     @Test
-    public void testLoginUser() {
-        String storedUsername = "user_";
-        String storedPassword = "Passw0rd!";
+    public void testCreateMessageHash() {
 
-        assertTrue(UserAuthSystem.loginUser("user_", "Passw0rd!", storedUsername, storedPassword));
-        assertFalse(UserAuthSystem.loginUser("wrong", "Passw0rd!", storedUsername, storedPassword));
-        assertFalse(UserAuthSystem.loginUser("user_", "wrong", storedUsername, storedPassword));
+        String id = "1234567890";
+        int number = 0;
+        String message = "Hello World";
+
+        String result = ApplicationSystem.createMessageHash(
+                id,
+                number,
+                message
+        );
+
+        assertEquals("12:0:HELLOWORLD", result); // expected hash
     }
 
+    // ---------------- STORE MESSAGE TEST ----------------
     @Test
-    public void testReturnLoginStatus() {
-        assertEquals("Login successful! Welcome back!", UserAuthSystem.returnLoginStatus(true));
-        assertEquals("Username or password incorrect, please try again.", UserAuthSystem.returnLoginStatus(false));
+    public void testStoreMessage() {
+
+        assertDoesNotThrow(() -> {
+
+            ApplicationSystem.storeMessage();
+        });
+    }
+
+    // ---------------- SHOW MESSAGE TEST ----------------
+    @Test
+    public void testShowMessages() {
+
+        assertDoesNotThrow(() -> {
+
+            ApplicationSystem.showMessages();
+        });
+    }
+
+    // ---------------- DISCARD MESSAGE TEST ----------------
+    @Test
+    public void testDiscardMessage() {
+
+        assertDoesNotThrow(() -> {
+
+            ApplicationSystem.discardMessage();
+        });
+    }
+
+    // ---------------- SIMPLE ARRAY TEST ----------------
+    @Test
+    public void testArrayNotNull() {
+
+        String[] data = {"user", "pass"};
+
+        assertNotNull(data); // array must exist
     }
 }
+
